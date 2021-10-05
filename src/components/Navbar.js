@@ -1,5 +1,10 @@
 import styles from "./Navbar.component.css";
 import { Link, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+const initialStoreState = {
+  isAuthenticated: false,
+};
 
 const NavHeader = (props) => {
   return (
@@ -15,29 +20,40 @@ const NavHeader = (props) => {
 };
 
 const Navbar = () => {
-  //   const navItems = (<NavHeader>
-  //   <NavIcons name="Movies" link="/"></NavIcons>
-  //   <NavIcons name="Add Movie" link="/Add_Movie"></NavIcons>
-  //   <NavIcons name="Favourites" link="/favourites"></NavIcons>
-  //   <li>
-  //     <button onClick={()=>console.log('Logout')}>logout</button>
-  //   </li>
-  // </NavHeader>);
+  const storeState = useSelector(
+    (state = initialStoreState) => state.isAuthenticated
+  );
 
-  const navItems = (
-    <NavHeader>
+  const loggedIn = (
+    <>
+      <li>
+        <NavLink to="/movies">Movies</NavLink>
+      </li>
+    </>
+  );
+
+  const loggedOut = (
+    <>
       <li>
         <NavLink to="/login">Login</NavLink>
       </li>
       <li>
         <NavLink to="/signup">Signup</NavLink>
       </li>
-      <li>
-        <NavLink to="/movies">Movies</NavLink>
-      </li>
-    </NavHeader>
+    </>
   );
+
+  const navItems = <NavHeader>{storeState ? loggedIn : loggedOut}</NavHeader>;
 
   return navItems;
 };
 export default Navbar;
+
+//   const navItems = (<NavHeader>
+//   <NavIcons name="Movies" link="/"></NavIcons>
+//   <NavIcons name="Add Movie" link="/Add_Movie"></NavIcons>
+//   <NavIcons name="Favourites" link="/favourites"></NavIcons>
+//   <li>
+//     <button onClick={()=>console.log('Logout')}>logout</button>
+//   </li>
+// </NavHeader>);

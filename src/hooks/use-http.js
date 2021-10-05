@@ -39,8 +39,10 @@ const useHttp = () => {
       } else if (response.status === 200) {
         const parsedData = await response.json();
         applyData(parsedData);
+        setIsLoading(false);
       }
     } catch (err) {
+      setIsLoading(false);
       setError(true);
       console.log(err);
     }

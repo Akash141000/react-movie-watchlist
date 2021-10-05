@@ -2,6 +2,9 @@ import { useEffect, useReducer, useState } from "react";
 import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
 
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+
 const initialState = {
   formData: null,
 };
@@ -14,9 +17,17 @@ const loginReducer = (state, action) => {
   }
   return state;
 };
+const initialStoreState = {
+  isAuthenticated: false,
+};
 
 const Login = () => {
-  const [response, setResponse] = useState(null);
+  const history = useHistory();
+  const storeState = useSelector(
+    (state = initialStoreState) => state.isAuthenticated
+  );
+  const dispatch = useDispatch();
+  const [responseData, setResponse] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 
   const [formState, formStateDispatch] = useReducer(loginReducer, initialState);
@@ -39,6 +50,17 @@ const Login = () => {
       );
     }
   }, [formState.formData]);
+
+  useEffect(() => {
+    if (!isLoading && !error) {
+      localStorage.setItem("token", responseData.token);
+      const remainingMilliseconds = 60 * 60 * 1000;
+      const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+      localStorage.setItem("expiryDate", expiryDate.toISOString());
+      dispatch({ type: "AUTHENTICATION", val: true });
+      history.push("/movies");
+    }
+  }, [isLoading, error]);
 
   return Form;
 };
