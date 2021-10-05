@@ -53,29 +53,3 @@ const useHttp = () => {
   };
 };
 export default useHttp;
-
-// try {
-//     let response;
-//     if (method === "POST") {
-//       response = await fetch(DOMAIN, {
-//         method: "POST",
-//         headers: headers,
-//         body: body,
-//       });
-//     } else {
-//       response = await fetch(DOMAIN, { method: "GET", headers: headers });
-//     }
-//     console.log(response);
-
-//     if (response.status === 401) {
-//       setError(true);
-//     } else if (response.status === 422) {
-//       setError(true);
-//     } else if (response.status === 200) {
-//       const parsedData = await response.json();
-//       applyData(parsedData);
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     setError(true);
-//   }
