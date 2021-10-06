@@ -1,40 +1,53 @@
 // Render Prop
 import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, ErrorMessage, useFormik } from "formik";
 import useHttp from "./use-http";
+import { Button, TextField } from "@mui/material";
 
-const useForm = (fieldsObj, sendFormDataDispatch) => {
+const useForm = (fieldsObj, validationSchema, sendFormDataDispatch) => {
+  const formik = useFormik({
+    initialValues: {
+      ...fieldsObj,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      sendFormDataDispatch({
+        type: "SUBMIT",
+        val: values,
+      });
+    },
+  });
+
   let fields = [];
-  for (const key in fieldsObj) {
-    fields.push(
-      <div key={key}>
-        <Field type={key} name={key} />
-        <ErrorMessage name={key} component="div" />
-      </div>
-    );
-  }
+  const FormFields = () => {
+    for (const key in fieldsObj) {
+      fields.push(
+        <div key={key}>
+          <TextField
+            id={key}
+            type={key}
+            name={key}
+            label={key}
+            value={formik.values[key]}
+            onChange={formik.handleChange}
+            error={formik.touched[key] && Boolean(formik.errors[key])}
+            helperText={formik.touched[key] && formik.errors[key]}
+          />
+        </div>
+      );
+    }
+    return [...fields];
+  };
+
   return (
-    <Formik
-      initialValues={{ ...fieldsObj }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          sendFormDataDispatch({
-            type: "SUBMIT",
-            val: values,
-          });
-          setSubmitting(false);
-        }, 400);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          {[...fields]}
-          <button type="submit" disabled={isSubmitting}>
-            Submit
-          </button>
-        </Form>
-      )}
-    </Formik>
+    <div>
+      <form onSubmit={formik.handleSubmit}>
+        {FormFields()}
+        <Button color={"primary"} type="submit">
+          Submit
+        </Button>
+      </form>
+    </div>
   );
 };
 

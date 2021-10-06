@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
+import * as yup from "yup";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
@@ -36,7 +37,17 @@ const Login = () => {
     password: "",
   };
 
-  const Form = useForm(inputFields, formStateDispatch);
+  const validationSchema = yup.object({
+    username: yup
+      .string("Enter your username")
+      .required("Username is required"),
+    password: yup
+      .string("Enter your password")
+      .min(8, "Password should be minimum 8 characters length")
+      .required("Password is required"),
+  });
+
+  const Form = useForm(inputFields, validationSchema, formStateDispatch);
 
   useEffect(() => {
     if (formState.formData !== null) {
