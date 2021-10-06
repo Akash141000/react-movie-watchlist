@@ -4,6 +4,7 @@ import Signup from "./pages/signup";
 import Navbar from "./components/Navbar";
 import Movies from "./pages/movies";
 import { useSelector } from "react-redux";
+import AddMovie from "./pages/addMovie";
 
 const initialStoreState = {
   isAuthenticated: false,
@@ -14,7 +15,7 @@ const App = () => {
     (state = initialStoreState) => state.isAuthenticated
   );
   const path = storeState ? "/movies" : "login";
-  const loggedIn = (
+  const loggedOut = (
     <>
       <Route path="/login" exact>
         <Login />
@@ -24,11 +25,14 @@ const App = () => {
       </Route>
     </>
   );
-  const loggedOut = (
+  const loggedIn = (
     <>
-      {loggedIn}
+      {loggedOut}
       <Route path="/movies">
         <Movies />
+      </Route>
+      <Route path="/add-movie">
+        <AddMovie/>
       </Route>
     </>
   );

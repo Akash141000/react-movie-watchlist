@@ -14,6 +14,7 @@ const useHttp = () => {
     headers = requestObj.headers
       ? { ...headers, ...requestObj.headers }
       : { ...headers };
+      console.log(headers);
     const body = method === "POST" ? { ...requestObj.body } : null;
     let requestBody = {
       method: method,

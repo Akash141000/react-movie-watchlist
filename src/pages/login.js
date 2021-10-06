@@ -5,6 +5,7 @@ import * as yup from "yup";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import FormLayout from "../layout/formLayout";
 
 const initialState = {
   formData: null,
@@ -73,6 +74,6 @@ const Login = () => {
     }
   }, [isLoading, error]);
 
-  return Form;
+  return <FormLayout heading="Login">{Form}</FormLayout>;
 };
 export default Login;

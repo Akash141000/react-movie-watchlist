@@ -1,0 +1,50 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+  width: 100vw;
+  background-color: teal;
+  position: relative;
+  /* z-index: 10; */
+}
+
+div h1 {
+  color: white;
+}
+
+.header div {
+  margin: 1rem;
+}
+
+.navItems ul {
+  list-style: none;
+}
+
+.navItems a {
+  text-decoration: none;
+  color: white;
+}
+
+.navItems a:hover {
+  font-size: large;
+  font-weight: bold;
+}
+
+.navItems li {
+  display: inline-block;
+  padding: 1rem;
+}
+
+button {
+  color: white;
+  font-size: inherit;
+  background-color: inherit;
+  cursor: pointer;
+}

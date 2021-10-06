@@ -1,4 +1,4 @@
-import styles from "./Navbar.component.css";
+import styles from "./Navbar.module.css";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -10,7 +10,7 @@ const NavHeader = (props) => {
   return (
     <div className={styles.header}>
       <div>
-        <h1>Movies WatchList</h1>
+        <h1>WatchList</h1>
       </div>
       <nav className={styles.navItems}>
         <ul>{props.children}</ul>
@@ -28,6 +28,9 @@ const Navbar = () => {
     <>
       <li>
         <NavLink to="/movies">Movies</NavLink>
+      </li>
+      <li>
+        <NavLink to="/add-movie">Add Movie</NavLink>
       </li>
     </>
   );

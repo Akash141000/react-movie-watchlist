@@ -22,8 +22,9 @@ const useForm = (fieldsObj, validationSchema, sendFormDataDispatch) => {
   const FormFields = () => {
     for (const key in fieldsObj) {
       fields.push(
-        <div key={key}>
+        <div key={key} style={{"margin":"1rem 0"}}>
           <TextField
+          fullWidth
             id={key}
             type={key}
             name={key}
@@ -40,14 +41,12 @@ const useForm = (fieldsObj, validationSchema, sendFormDataDispatch) => {
   };
 
   return (
-    <div>
-      <form onSubmit={formik.handleSubmit}>
-        {FormFields()}
-        <Button color={"primary"} type="submit">
-          Submit
-        </Button>
-      </form>
-    </div>
+        <form onSubmit={formik.handleSubmit}>
+          {FormFields()}
+          <Button fullWidth  color="primary" variant="outlined" type="submit" disabled={formik.isSubmitting}>
+            Submit
+          </Button>
+        </form>
   );
 };
 

@@ -8,7 +8,7 @@ const initialState = {
   formData: null,
 };
 
-const signupReducer = (state, action) => {
+const addMovieReducer = (state, action) => {
   if (action.type === "SUBMIT") {
     return {
       formData: action.val,
@@ -17,45 +17,38 @@ const signupReducer = (state, action) => {
   return state;
 };
 
-const Signup = () => {
+const AddMovie = () => {
   const [response, setResponse] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 
   const [formState, formStateDispatch] = useReducer(
-    signupReducer,
+    addMovieReducer,
     initialState
   );
   const inputFields = {
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    title: "",
+    image: "",
+    description: "",
   };
 
   const validationSchema = yup.object({
-    username: yup
-      .string("Enter your username")
-      .required("Username is required"),
-    email: yup
+    title: yup
+      .string("Enter a title")
+      .required("Title is required"),
+    image: yup
       .string("Enter your email")
-      .email("Enter valid email")
-      .required("Email is required"),
-    password: yup
-      .string("Enter your password")
-      .min(8, "Password should be minimum 8 characters length")
-      .required("Password is required"),
-    confirmPassword: yup
-      .string("Enter same password as above")
-      .min(8, "Password should be minimum 8 characters length")
-      .min(8, "Password should be minimum 8 characters length")
-      .required("Confirm Password is required"),
+      .url("Enter valid url")
+      .required("Image url is required"),
+    description: yup
+      .string("Enter movie description")
+      .required("Description is required"),
   });
   const Form = useForm(inputFields, validationSchema, formStateDispatch);
 
   useEffect(() => {
     if (formState.formData !== null) {
       sendResponse(
-        "/postSignup",
+        "/addPost",
         {
           method: "POST",
           body: formState.formData,
@@ -65,6 +58,6 @@ const Signup = () => {
     }
   }, [formState.formData]);
 
-  return <FormLayout heading="Signup">{Form}</FormLayout>;
+  return <FormLayout heading="Add Movie">{Form}</FormLayout>;
 };
-export default Signup;
+export default AddMovie;
