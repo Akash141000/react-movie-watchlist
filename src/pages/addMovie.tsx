@@ -1,8 +1,9 @@
 import { useEffect, useReducer, useState } from "react";
 import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
-import * as yup from "yup";
+import { object, SchemaOf, string } from "yup";
 import FormLayout from "../layout/formLayout";
+import { formFieldsObj } from "../util/types";
 
 const initialState = {
   formData: null,
@@ -25,23 +26,36 @@ const AddMovie = () => {
     addMovieReducer,
     initialState
   );
-  const inputFields = {
-    title: "",
-    image: "",
-    description: "",
-  };
 
-  const validationSchema = yup.object({
-    title: yup
-      .string("Enter a title")
-      .required("Title is required"),
-    image: yup
-      .string("Enter your email")
-      .url("Enter valid url")
-      .required("Image url is required"),
-    description: yup
-      .string("Enter movie description")
-      .required("Description is required"),
+  const inputFields: formFieldsObj = {
+    title: {
+      initial: "",
+      type: "text",
+      label: "Title",
+    },
+    imageUrl: {
+      initial: "",
+      type: "text",
+      label: "Image",
+    },
+    description: {
+      initial: "",
+      type: "text",
+      label: "Description",
+    },
+  };
+  interface yupSchema {
+    title: string;
+    imageUrl: string;
+    description: string;
+  }
+
+  const validationSchema: SchemaOf<yupSchema> = object({
+    title: string().required("Title is required"),
+    imageUrl: string().required("Image url is required"),
+    description: string().required(
+      "Description is required"
+    ),
   });
   const Form = useForm(inputFields, validationSchema, formStateDispatch);
 
@@ -52,7 +66,11 @@ const AddMovie = () => {
         {
           method: "POST",
           body: formState.formData,
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
         },
+      
         setResponse
       );
     }

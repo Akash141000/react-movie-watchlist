@@ -2,10 +2,13 @@ import { useEffect, useReducer, useState } from "react";
 import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
 import * as yup from "yup";
+import { SchemaOf, object, string } from "yup";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import FormLayout from "../layout/formLayout";
+import { formFieldsObj } from "../util/types";
+import { initialStoreState } from "../store/store";
 
 const initialState = {
   formData: null,
@@ -19,31 +22,39 @@ const loginReducer = (state, action) => {
   }
   return state;
 };
-const initialStoreState = {
-  isAuthenticated: false,
-};
 
 const Login = () => {
   const history = useHistory();
-  const storeState = useSelector(
-    (state = initialStoreState) => state.isAuthenticated
+  const storeState = useSelector<initialStoreState,boolean>(
+    (state) => state.isAuthenticated
   );
   const dispatch = useDispatch();
   const [responseData, setResponse] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 
   const [formState, formStateDispatch] = useReducer(loginReducer, initialState);
-  const inputFields = {
-    username: "",
-    password: "",
+  const inputFields: formFieldsObj = {
+    username: {
+      initial: "",
+      type: "text",
+      label: "Title",
+    },
+    password: {
+      initial: "",
+      type: "password",
+      label: "Password",
+    },
   };
 
-  const validationSchema = yup.object({
-    username: yup
-      .string("Enter your username")
-      .required("Username is required"),
+  interface yupSchema {
+    username: string;
+    password: string;
+  }
+
+  const validationSchema: SchemaOf<yupSchema> = yup.object({
+    username: yup.string().required("Username is required"),
     password: yup
-      .string("Enter your password")
+      .string()
       .min(8, "Password should be minimum 8 characters length")
       .required("Password is required"),
   });

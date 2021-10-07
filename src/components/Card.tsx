@@ -1,8 +1,11 @@
 import FavouriteIcon from "@mui/icons-material/FavoriteOutlined";
 import { IconButton } from "@mui/material";
 import styles from "./Card.module.css";
+import React from "react";
 
-const Card = (props) => {
+const Card: React.FC<{ title: string; imgSrc: string; description: string }> = (
+  props
+) => {
   return (
     <>
       <div className={styles.card_title}>

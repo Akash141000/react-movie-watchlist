@@ -1,15 +1,16 @@
 import { useState } from "react";
+import { requestObj } from "../util/types";
 
 const useHttp = () => {
   const { REACT_APP_DOMAIN } = process.env;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const sendResponse = async (appendUrl, requestObj, applyData) => {
+  const sendResponse = async (appendUrl:string, requestObj:requestObj, applyData:any) => {
     let ContentType = {
       "Content-Type": "application/json",
     };
-    const DOMAIN = REACT_APP_DOMAIN.concat(appendUrl);
+    const DOMAIN = REACT_APP_DOMAIN!.concat(appendUrl);
 
     const method = requestObj.method ? requestObj.method : "GET";
     const headers = requestObj.headers

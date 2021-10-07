@@ -1,12 +1,12 @@
 import styles from "./Navbar.module.css";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import React from "react";
+import { initialStoreState } from "../store/store";
 
-const initialStoreState = {
-  isAuthenticated: false,
-};
 
-const NavHeader = (props) => {
+
+const NavHeader: React.FC = (props) => {
   return (
     <div className={styles.header}>
       <div>
@@ -20,8 +20,8 @@ const NavHeader = (props) => {
 };
 
 const Navbar = () => {
-  const storeState = useSelector(
-    (state = initialStoreState) => state.isAuthenticated
+  const storeState = useSelector<initialStoreState,boolean>(
+    (state) => state.isAuthenticated
   );
 
   const loggedIn = (

@@ -3,6 +3,8 @@ import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
 import * as yup from "yup";
 import FormLayout from "../layout/formLayout";
+import { formFieldsObj } from "../util/types";
+import { SchemaOf, object, string } from "yup";
 
 const initialState = {
   formData: null,
@@ -25,27 +27,36 @@ const Signup = () => {
     signupReducer,
     initialState
   );
-  const inputFields = {
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const inputFields: formFieldsObj = {
+    username: {
+      initial: "",
+      type: "text",
+      label: "Username",
+    },
+    email: {
+      initial: "",
+      type: "email",
+      label: "Email",
+    },
+    password: {
+      initial: "",
+      type: "password",
+      label: "Password",
+    },
+    confirmPassword: {
+      initial: "",
+      type: "password",
+      label: "Confirm Password",
+    },
   };
 
   const validationSchema = yup.object({
-    username: yup
-      .string("Enter your username")
-      .required("Username is required"),
-    email: yup
-      .string("Enter your email")
-      .email("Enter valid email")
-      .required("Email is required"),
-    password: yup
-      .string("Enter your password")
+    username: string().required("Username is required"),
+    email: string().email("Enter valid email").required("Email is required"),
+    password: string()
       .min(8, "Password should be minimum 8 characters length")
       .required("Password is required"),
-    confirmPassword: yup
-      .string("Enter same password as above")
+    confirmPassword: string()
       .min(8, "Password should be minimum 8 characters length")
       .min(8, "Password should be minimum 8 characters length")
       .required("Confirm Password is required"),
