@@ -1,0 +1,47 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+html {
+  font-family: sans-serif;
+}
+
+
+.img_prop {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 17rem;
+}
+
+.card_image {
+  width: 100%;
+  height: 17rem;
+}
+
+.card_title {
+  font: bold;
+  padding: 1rem;
+}
+
+.card_description {
+  margin: 0.5rem 0;
+  font-weight: 400;
+}
+
+.card_input {
+  align-self: flex-end;
+  margin: 0.3rem;
+}
+
+.btn {
+  color: red;
+  height: 1.7rem;
+  cursor: pointer;
+}
+
+/* .hLink{
+    border-radius: 1rem;
+  } */
+

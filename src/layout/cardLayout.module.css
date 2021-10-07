@@ -1,0 +1,15 @@
+.cardLayout {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 20rem;
+  height: 25rem;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 0.7rem 0;
+}
+
+.cardLayout:hover {
+    box-shadow: 0.3rem 0.3rem 1rem 0.1rem gray;
+  }
+  

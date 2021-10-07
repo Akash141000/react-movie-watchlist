@@ -6,26 +6,28 @@ const useHttp = () => {
   const [error, setError] = useState(false);
 
   const sendResponse = async (appendUrl, requestObj, applyData) => {
-    let headers = {
+    let ContentType = {
       "Content-Type": "application/json",
     };
     const DOMAIN = REACT_APP_DOMAIN.concat(appendUrl);
+
     const method = requestObj.method ? requestObj.method : "GET";
-    headers = requestObj.headers
-      ? { ...headers, ...requestObj.headers }
-      : { ...headers };
-      console.log(headers);
+    const headers = requestObj.headers
+      ? { ...ContentType, ...requestObj.headers }
+      : { ...ContentType };
     const body = method === "POST" ? { ...requestObj.body } : null;
     let requestBody = {
       method: method,
       headers: headers,
       body: null,
     };
-    requestBody = method === "POST" && {
-      ...requestBody,
-      body: JSON.stringify({ ...body }),
-    };
-
+    requestBody =
+      method === "POST"
+        ? {
+            ...requestBody,
+            body: JSON.stringify({ ...body }),
+          }
+        : { ...requestBody };
     setIsLoading(true);
     setError(null);
     try {
