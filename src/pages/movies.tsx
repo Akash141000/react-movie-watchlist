@@ -7,7 +7,12 @@ import CardLayout from "../layout/cardLayout";
 import { Post } from "../util/types";
 
 const Movies = () => {
-  const [responseData, setResponseData] = useState<Post[]>([]);
+  const [responseData, setResponseData] = useState<{
+    posts: Post[];
+    favourites: any[];
+  }>(null);
+
+  const [postResponseData, setPostResponseData] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 
   useEffect(() => {
@@ -22,23 +27,47 @@ const Movies = () => {
     );
   }, []);
 
+  const addOrRemoveFromFav = (post: Post, isFav: boolean) => {
+    sendResponse(
+      isFav ? "/removeFromFavourites" : "/addToFavourites",
+      {
+        method: "POST",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+        body: {
+          post: {
+            ...post,
+          },
+        },
+      },
+      setPostResponseData
+    );
+  };
+
+  // useEffect(() => {
+  //   const allPosts = responseData.posts;
+  // }, [responseData.favourites]);
+
   let cards;
   if (!isLoading && !error) {
-    cards = (
-      <ul>
-        {responseData.map((data) => {
-          return (
-            <CardLayout>
-              <Card
-                imgSrc={data.image}
-                description={data.description}
-                title={data.title}
-              />
-            </CardLayout>
-          );
-        })}
-      </ul>
-    );
+    cards = responseData.posts!.map((data) => {
+      let isfav;
+      responseData.favourites.forEach((fav) => {
+        fav === data._id ? (isfav = true) : (isfav = false);
+      });
+      return (
+        <CardLayout>
+          <Card
+            imgSrc={data.image}
+            description={data.description}
+            title={data.title}
+            isFav={isfav}
+            addOrRemoveFromFav={addOrRemoveFromFav.bind(null, data, isfav)}
+          />
+        </CardLayout>
+      );
+    });
   }
 
   return isLoading ? (

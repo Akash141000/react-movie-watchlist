@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Movies from "./pages/movies";
 import { useSelector } from "react-redux";
 import AddMovie from "./pages/addMovie";
+import Favourites from "./pages/favourites";
 
 const initialStoreState = {
   isAuthenticated: false,
@@ -33,6 +34,9 @@ const App = () => {
       </Route>
       <Route path="/add-movie">
         <AddMovie/>
+      </Route>
+      <Route path="/favourites">
+        <Favourites/>
       </Route>
     </>
   );

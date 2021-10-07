@@ -10,6 +10,7 @@ export type Post = {
   title: string;
   image: string;
   description: string;
+  _id:string;
 };
 
 export interface requestObj {

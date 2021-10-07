@@ -77,6 +77,7 @@ const Login = () => {
   useEffect(() => {
     if (!isLoading && !error) {
       localStorage.setItem("token", responseData.token);
+      localStorage.setItem("user",responseData.user);
       const remainingMilliseconds = 60 * 60 * 1000;
       const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
       localStorage.setItem("expiryDate", expiryDate.toISOString());

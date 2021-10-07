@@ -1,11 +1,17 @@
 import FavouriteIcon from "@mui/icons-material/FavoriteOutlined";
+import NotFavouriteIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { IconButton } from "@mui/material";
 import styles from "./Card.module.css";
 import React from "react";
+import { Post } from "../util/types";
 
-const Card: React.FC<{ title: string; imgSrc: string; description: string }> = (
-  props
-) => {
+const Card: React.FC<{
+  title: string;
+  imgSrc: string;
+  description: string;
+  isFav: boolean;
+  addOrRemoveFromFav: () => void;
+}> = (props) => {
   return (
     <>
       <div className={styles.card_title}>
@@ -19,8 +25,12 @@ const Card: React.FC<{ title: string; imgSrc: string; description: string }> = (
       </div>
 
       <div className={styles.card_input}>
-        <IconButton onClick={() => console.log("clicked...")}>
-          <FavouriteIcon className={styles.btn} />
+        <IconButton onClick={props.addOrRemoveFromFav}>
+          {props.isFav ? (
+            <FavouriteIcon className={styles.btn} />
+          ) : (
+            <NotFavouriteIcon />
+          )}
         </IconButton>
       </div>
     </>
