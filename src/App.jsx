@@ -1,21 +1,16 @@
 import Login from "./pages/login";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Signup from "./pages/signup";
-import Navbar from "./components/Navbar";
 import Movies from "./pages/movies";
-import { useSelector } from "react-redux";
 import AddMovie from "./pages/addMovie";
 import Favourites from "./pages/favourites";
+import { useContext } from "react";
+import AuthContext from "./store/auth-context";
 
-const initialStoreState = {
-  isAuthenticated: false,
-};
 
 const App = () => {
-  const storeState = useSelector(
-    (state = initialStoreState) => state.isAuthenticated
-  );
-  const path = storeState ? "/movies" : "login";
+  const context = useContext(AuthContext);
+  const path = context.isAuthenticated ? "/movies" : "login";
   const loggedOut = (
     <>
       <Route path="/login" exact>
@@ -33,10 +28,10 @@ const App = () => {
         <Movies />
       </Route>
       <Route path="/add-movie">
-        <AddMovie/>
+        <AddMovie />
       </Route>
       <Route path="/favourites">
-        <Favourites/>
+        <Favourites />
       </Route>
     </>
   );
@@ -45,7 +40,7 @@ const App = () => {
       <Route path="/" exact>
         <Redirect to={path} />
       </Route>
-      {storeState ? loggedIn : loggedOut}
+      {context.isAuthenticated ? loggedIn : loggedOut}
     </Switch>
   );
 };

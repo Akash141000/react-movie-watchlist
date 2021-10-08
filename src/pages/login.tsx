@@ -1,14 +1,12 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState,useContext } from "react";
 import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
 import * as yup from "yup";
 import { SchemaOf, object, string } from "yup";
-
-import { useDispatch, useSelector } from "react-redux";
+import AuthContext from "../store/auth-context";
 import { useHistory } from "react-router";
 import FormLayout from "../layout/formLayout";
 import { formFieldsObj } from "../util/types";
-import { initialStoreState } from "../store/store";
 
 const initialState = {
   formData: null,
@@ -24,11 +22,8 @@ const loginReducer = (state, action) => {
 };
 
 const Login = () => {
+  const context = useContext(AuthContext);
   const history = useHistory();
-  const storeState = useSelector<initialStoreState,boolean>(
-    (state) => state.isAuthenticated
-  );
-  const dispatch = useDispatch();
   const [responseData, setResponse] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 
@@ -76,13 +71,7 @@ const Login = () => {
 
   useEffect(() => {
     if (!isLoading && !error) {
-      localStorage.setItem("token", responseData.token);
-      localStorage.setItem("user",responseData.user);
-      const remainingMilliseconds = 60 * 60 * 1000;
-      const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
-      localStorage.setItem("expiryDate", expiryDate.toISOString());
-      dispatch({ type: "AUTHENTICATION", val: true });
-      history.push("/movies");
+      context.setAuthentication(responseData);
     }
   }, [isLoading, error]);
 

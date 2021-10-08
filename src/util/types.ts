@@ -11,6 +11,7 @@ export type Post = {
   image: string;
   description: string;
   _id:string;
+  isFav?:boolean;
 };
 
 export interface requestObj {

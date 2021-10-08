@@ -5,12 +5,18 @@ import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import { AuthContextProvider } from "./store/auth-context";
+import { FavContextProvider } from "./store/fav-context";
 
 ReactDom.render(
   <BrowserRouter>
     <Provider store={store}>
-      <Navbar />
-      <App />
+      <AuthContextProvider>
+        <FavContextProvider>
+        <Navbar />
+        <App />
+        </FavContextProvider>
+      </AuthContextProvider>
     </Provider>
   </BrowserRouter>,
   document.getElementById("root")

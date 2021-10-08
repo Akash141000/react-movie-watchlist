@@ -1,35 +1,50 @@
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { useState } from "react";
 import { createStore } from "redux";
+import useHttp from "../hooks/use-http";
 import { Post } from "../util/types";
 
 export interface initialStoreState {
-  isAuthenticated: boolean;
   favourites: Post[];
+  movies: Post[];
 }
 
-const initalState: initialStoreState = {
-  isAuthenticated: false,
+const initialState: initialStoreState = {
   favourites: [],
+  movies: [],
 };
 
-const reducer = (state = initalState, action) => {
-  if (action.type === "ADD_TO_FAV") {
-    const fav: Post[] = [...state.favourites];
-    fav.push(action.val);
-    return {
-      isAuthenticated: state.isAuthenticated,
-      favourites: fav,
-    };
-  }
-  if (action.type === "AUTHENTICATION") {
-    return {
-      isAuthenticated: action.val,
-      favourites: state.favourites,
-    };
-  }
+const favReducer = createSlice({
+  name: "FavouriteReducer",
+  initialState,
+  reducers: {
+    addToFavourites(state, action) {
+      state.favourites.push(action.payload);
+    },
+    removeFromFavourites(state, action: { payload: Post }) {
+      state.movies.filter((movie) => movie._id !== action.payload._id);
 
-  return state;
-};
+      state.favourites = state.favourites.filter(
+        (item) => item._id !== action.payload._id
+      );
+    },
+    addToMovies(state, action) {
+      state.movies.push(action.payload);
+    },
+  },
+});
 
-const store = createStore(reducer);
+// export const favDispatch = (post: Post) => {
+//   console.log('dispatch',post);
+//   return (dispatch) => {
+//     dispatch(favAction.addToFavourites(post));
+//   };
+// };
+
+export const favAction = favReducer.actions;
+
+const store = configureStore({
+  reducer: favReducer.reducer,
+});
 
 export default store;

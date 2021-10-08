@@ -1,8 +1,9 @@
 import styles from "./Navbar.module.css";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import React from "react";
+import React, { useContext } from "react";
 import { initialStoreState } from "../store/store";
+import AuthContext from "../store/auth-context";
 
 
 
@@ -20,9 +21,7 @@ const NavHeader: React.FC = (props) => {
 };
 
 const Navbar = () => {
-  const storeState = useSelector<initialStoreState,boolean>(
-    (state) => state.isAuthenticated
-  );
+  const context = useContext(AuthContext);
 
   const loggedIn = (
     <>
@@ -31,6 +30,9 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink to="/add-movie">Add Movie</NavLink>
+      </li>
+      <li>
+        <NavLink to="/favourites">Favourites</NavLink>
       </li>
     </>
   );
@@ -46,7 +48,7 @@ const Navbar = () => {
     </>
   );
 
-  const navItems = <NavHeader>{storeState ? loggedIn : loggedOut}</NavHeader>;
+  const navItems = <NavHeader>{context.isAuthenticated ? loggedIn : loggedOut}</NavHeader>;
 
   return navItems;
 };
