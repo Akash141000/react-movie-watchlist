@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import useHttp from "../hooks/use-http";
 import Card from "../components/Card";
 import CardLayout from "../layout/cardLayout";
-import { Post } from "../util/types";
+import { dispatchType, Post } from "../util/types";
 import FavContext from "../store/fav-context";
 import { useSelector, useDispatch } from "react-redux";
 import { favAction, initialStoreState } from "../store/store";
@@ -48,20 +48,19 @@ const Movies = () => {
     if (!isLoading) {
       const elements = responseData.posts.map((data) => {
         return (
-          <CardLayout>
-            <Card
-              key={data._id}
-              imgSrc={data.image}
-              description={data.description}
-              title={data.title}
-              isFav={data.isFav}
-              addOrRemoveFromFav={favContext.favAction.bind(
-                null,
-                data,
-                data.isFav
-              )}
-            />
-          </CardLayout>
+          <Card
+            key={data._id}
+            imgSrc={data.image}
+            description={data.description}
+            title={data.title}
+            isFav={data.isFav}
+            addOrRemoveFromFav={favContext.favAction.bind(
+              null,
+              data,
+              data.isFav,
+              dispatchType.movies
+            )}
+          />
         );
       });
       setCards(elements);

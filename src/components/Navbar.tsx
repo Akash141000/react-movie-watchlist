@@ -1,11 +1,10 @@
 import styles from "./Navbar.module.css";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { initialStoreState } from "../store/store";
 import AuthContext from "../store/auth-context";
-
-
+import { Button } from "@mui/material";
 
 const NavHeader: React.FC = (props) => {
   return (
@@ -22,6 +21,9 @@ const NavHeader: React.FC = (props) => {
 
 const Navbar = () => {
   const context = useContext(AuthContext);
+  useEffect(()=>{
+    context.autoLogin();
+  },[]);
 
   const loggedIn = (
     <>
@@ -33,6 +35,9 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink to="/favourites">Favourites</NavLink>
+      </li>
+      <li>
+        <NavLink to="/" onClick={context.removeAuthentication}>Logout</NavLink>
       </li>
     </>
   );
@@ -48,7 +53,9 @@ const Navbar = () => {
     </>
   );
 
-  const navItems = <NavHeader>{context.isAuthenticated ? loggedIn : loggedOut}</NavHeader>;
+  const navItems = (
+    <NavHeader>{context.isAuthenticated ? loggedIn : loggedOut}</NavHeader>
+  );
 
   return navItems;
 };

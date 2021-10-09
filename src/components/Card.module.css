@@ -7,7 +7,6 @@ html {
   font-family: sans-serif;
 }
 
-
 .img_prop {
   display: flex;
   flex-wrap: wrap;
@@ -45,3 +44,12 @@ html {
     border-radius: 1rem;
   } */
 
+.list {
+  list-style: none;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}

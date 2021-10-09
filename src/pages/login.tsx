@@ -69,6 +69,10 @@ const Login = () => {
     }
   }, [formState.formData]);
 
+  useEffect(()=>{
+    context.autoLogin();
+  },[])
+
   useEffect(() => {
     if (!isLoading && !error) {
       context.setAuthentication(responseData);

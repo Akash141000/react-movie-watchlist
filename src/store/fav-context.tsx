@@ -1,11 +1,11 @@
 import { createContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../hooks/use-http";
-import { Post } from "../util/types";
+import { dispatchType, Post } from "../util/types";
 import { favAction, initialStoreState } from "./store";
 
 const FavContext = createContext({
-  favAction: (post: Post, isFav: boolean) => {},
+  favAction: (post: Post, isFav: boolean,type:dispatchType) => {},
 });
 
 export const FavContextProvider = (props) => {
@@ -13,14 +13,16 @@ export const FavContextProvider = (props) => {
   const [responseData, setResponseData] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
   const movies = useSelector((state: initialStoreState) => state.movies);
-  const addOrRemoveFromFav = (post: Post, isFav: boolean) => {
-    console.log("fav context");
+  const addOrRemoveFromFav = (
+    post: Post,
+    isFav: boolean,
+    type: dispatchType
+  ) => {
     if (isFav) {
-      console.log("is fav");
-      dispatch(favAction.removeFromFavourites(post));
+      dispatch(favAction.removeFromFavourites({ post: post, type: type }));
     } else {
       console.log("not fav");
-      dispatch(favAction.addToFavourites(post));
+      dispatch(favAction.addToFavourites({ post: post, type: type }));
     }
     sendResponse(
       isFav ? "/removeFromFavourites" : "/addToFavourites",

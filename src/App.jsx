@@ -7,7 +7,6 @@ import Favourites from "./pages/favourites";
 import { useContext } from "react";
 import AuthContext from "./store/auth-context";
 
-
 const App = () => {
   const context = useContext(AuthContext);
   const path = context.isAuthenticated ? "/movies" : "login";
@@ -37,10 +36,10 @@ const App = () => {
   );
   return (
     <Switch>
-      <Route path="/" exact>
+      {context.isAuthenticated ? loggedIn : loggedOut}
+      <Route path="/">
         <Redirect to={path} />
       </Route>
-      {context.isAuthenticated ? loggedIn : loggedOut}
     </Switch>
   );
 };

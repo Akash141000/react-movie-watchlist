@@ -4,6 +4,7 @@ import { IconButton } from "@mui/material";
 import styles from "./Card.module.css";
 import React from "react";
 import { Post } from "../util/types";
+import CardLayout from "../layout/cardLayout";
 
 const Card: React.FC<{
   title: string;
@@ -13,7 +14,7 @@ const Card: React.FC<{
   addOrRemoveFromFav: () => void;
 }> = (props) => {
   return (
-    <>
+    <CardLayout>
       <div className={styles.card_title}>
         <h3>{props.title}</h3>
       </div>
@@ -33,7 +34,7 @@ const Card: React.FC<{
           )}
         </IconButton>
       </div>
-    </>
+    </CardLayout>
   );
 };
 

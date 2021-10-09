@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import useHttp from "../hooks/use-http";
 
 interface authData {
   token: string;
@@ -10,10 +11,13 @@ const AuthContext = createContext({
   isAuthenticated: false,
   setAuthentication: (authData: authData) => void {},
   removeAuthentication: () => void {},
+  autoLogin: () => void {},
 });
 
 export const AuthContextProvider = (props) => {
   const history = useHistory();
+  const { isLoading, error, sendResponse } = useHttp();
+  const [responseData, setResponseData] = useState(null);
   const [authenticated, isAuthenticated] = useState(false);
 
   function setAuthentication(authData) {
@@ -26,6 +30,30 @@ export const AuthContextProvider = (props) => {
     isAuthenticated(true);
   }
 
+  function tryAuthentication() {
+    const token = localStorage.getItem("token");
+    console.log('is true');
+    if (token) {
+      sendResponse(
+        "/auth",
+        {
+          headers: {
+            Authorization: token,
+          },
+        },
+        setResponseData
+      );
+    }
+  }
+
+  useEffect(() => {
+    console.log('response',responseData);
+    if (!isLoading && !error && responseData.auth) {
+      isAuthenticated(true);
+      history.push("/movies");
+    }
+  }, [isLoading, error]);
+
   function removeAuthentication() {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
@@ -37,6 +65,7 @@ export const AuthContextProvider = (props) => {
     isAuthenticated: authenticated,
     setAuthentication: setAuthentication,
     removeAuthentication: removeAuthentication,
+    autoLogin: tryAuthentication,
   };
 
   return (
