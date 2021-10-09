@@ -4,7 +4,7 @@ import useHttp from "../hooks/use-http";
 import * as yup from "yup";
 import FormLayout from "../layout/formLayout";
 import { formFieldsObj } from "../util/types";
-import { SchemaOf, object, string } from "yup";
+import { SchemaOf,object, string } from "yup";
 
 const initialState = {
   formData: null,
@@ -20,7 +20,7 @@ const signupReducer = (state, action) => {
 };
 
 const Signup = () => {
-  const [response, setResponse] = useState(null);
+  const [responseData, setResponseData] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 
   const [formState, formStateDispatch] = useReducer(
@@ -50,7 +50,14 @@ const Signup = () => {
     },
   };
 
-  const validationSchema = yup.object({
+  interface yupSchema{
+    username:string,
+    email:string,
+    password:string,
+    confirmPassword:string,
+  }
+
+  const validationSchema:SchemaOf<yupSchema> = object({
     username: string().required("Username is required"),
     email: string().email("Enter valid email").required("Email is required"),
     password: string()
@@ -71,7 +78,7 @@ const Signup = () => {
           method: "POST",
           body: formState.formData,
         },
-        setResponse
+        setResponseData
       );
     }
   }, [formState.formData]);

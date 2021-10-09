@@ -4,7 +4,6 @@ import useHttp from "../hooks/use-http";
 import * as yup from "yup";
 import { SchemaOf, object, string } from "yup";
 import AuthContext from "../store/auth-context";
-import { useHistory } from "react-router";
 import FormLayout from "../layout/formLayout";
 import { formFieldsObj } from "../util/types";
 
@@ -23,7 +22,6 @@ const loginReducer = (state, action) => {
 
 const Login = () => {
   const context = useContext(AuthContext);
-  const history = useHistory();
   const [responseData, setResponse] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 

@@ -6,7 +6,11 @@ const useHttp = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const sendResponse = async (appendUrl:string, requestObj:requestObj, applyData:any) => {
+  const sendResponse = async (
+    appendUrl: string,
+    requestObj: requestObj,
+    applyData: any
+  ) => {
     let ContentType = {
       "Content-Type": "application/json",
     };
@@ -34,13 +38,16 @@ const useHttp = () => {
     try {
       const response = await fetch(`${DOMAIN}`, { ...requestBody });
 
-      if (response.status === 401) {
-        setError(true);
-      } else if (response.status === 422) {
-        setError(true);
-      } else if (response.status === 500) {
-        setError(true);
+      const responseTimer = setTimeout(() => {
+        if (!response) {
+          throw new Error("Error fetching data");
+        }
+      }, 5000);
+      if (response.status === 401 && 422 && 500) {
+        window.clearTimeout(responseTimer);
+        throw new Error("Error fetching data");
       } else if (response.status === 200) {
+        window.clearTimeout(responseTimer);
         const parsedData = await response.json();
         applyData(parsedData);
         setIsLoading(false);

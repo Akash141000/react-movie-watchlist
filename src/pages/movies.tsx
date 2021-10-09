@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import useHttp from "../hooks/use-http";
 import Card from "../components/Card";
-import CardLayout from "../layout/cardLayout";
 import { dispatchType, Post } from "../util/types";
 import FavContext from "../store/fav-context";
 import { useSelector, useDispatch } from "react-redux";
@@ -31,10 +30,8 @@ const Movies = () => {
   }, []);
 
   useEffect(() => {
-    console.log("movies changes");
     if (movies.length > 0) {
       setResponseData({ posts: movies });
-      console.log("movies");
     }
   }, [movies]);
 

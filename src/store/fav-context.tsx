@@ -21,7 +21,6 @@ export const FavContextProvider = (props) => {
     if (isFav) {
       dispatch(favAction.removeFromFavourites({ post: post, type: type }));
     } else {
-      console.log("not fav");
       dispatch(favAction.addToFavourites({ post: post, type: type }));
     }
     sendResponse(

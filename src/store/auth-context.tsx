@@ -21,6 +21,7 @@ export const AuthContextProvider = (props) => {
   const [authenticated, isAuthenticated] = useState(false);
 
   function setAuthentication(authData) {
+    console.log('auth data',authData);
     localStorage.setItem("token", authData.token);
     localStorage.setItem("user", authData.user);
     const remainingMilliseconds = 60 * 60 * 1000;
@@ -32,7 +33,6 @@ export const AuthContextProvider = (props) => {
 
   function tryAuthentication() {
     const token = localStorage.getItem("token");
-    console.log('is true');
     if (token) {
       sendResponse(
         "/auth",
@@ -47,7 +47,7 @@ export const AuthContextProvider = (props) => {
   }
 
   useEffect(() => {
-    if (!isLoading && !error && responseData.auth) {
+    if (!isLoading && !error && responseData) {
       isAuthenticated(true);
       history.push("/movies");
     }
