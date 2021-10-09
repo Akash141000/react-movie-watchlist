@@ -7,14 +7,14 @@ import FavContext from "../store/fav-context";
 import { useSelector, useDispatch } from "react-redux";
 import { favAction, initialStoreState } from "../store/store";
 
-
 const Movies = () => {
-  const dispatch = useDispatch();
   const favContext = useContext(FavContext);
+  const dispatch = useDispatch();
   const movies = useSelector((state: initialStoreState) => state.movies);
+  const [cards, setCards] = useState([]);
   const [responseData, setResponseData] = useState<{
     posts: Post[];
-  }>({posts:null});
+  }>({ posts: null });
 
   const { isLoading, error, sendResponse } = useHttp();
 
@@ -30,14 +30,19 @@ const Movies = () => {
     );
   }, []);
 
-  const [cards,setCards] = useState([]);
-
   useEffect(() => {
-    if(movies.length > 0){
+    console.log("movies changes");
+    if (movies.length > 0) {
       setResponseData({ posts: movies });
-      console.log('movies');
+      console.log("movies");
     }
   }, [movies]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      dispatch(favAction.addMovies(responseData.posts));
+    }
+  }, [isLoading, error]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -45,6 +50,7 @@ const Movies = () => {
         return (
           <CardLayout>
             <Card
+              key={data._id}
               imgSrc={data.image}
               description={data.description}
               title={data.title}
@@ -60,7 +66,7 @@ const Movies = () => {
       });
       setCards(elements);
     }
-  }, [responseData.posts,isLoading]);
+  }, [responseData.posts, isLoading]);
 
   return isLoading && error ? (
     <div>Loading...</div>
