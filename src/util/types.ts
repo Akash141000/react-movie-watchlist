@@ -24,3 +24,12 @@ export enum dispatchType {
   movies,
   favourites,
 }
+
+export enum formReducer{
+  submit
+}
+
+
+export interface initialFormReducerState{
+  formData:any
+}

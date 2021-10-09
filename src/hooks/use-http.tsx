@@ -37,16 +37,18 @@ const useHttp = () => {
     setError(null);
     try {
       const response = await fetch(`${DOMAIN}`, { ...requestBody });
-
+    
       const responseTimer = setTimeout(() => {
         if (!response) {
           throw new Error("Error fetching data");
         }
       }, 5000);
       if (response.status === 401 && 422 && 500) {
+ 
         window.clearTimeout(responseTimer);
         throw new Error("Error fetching data");
-      } else if (response.status === 200) {
+      } else if (response.status === 200 || 201) {
+
         window.clearTimeout(responseTimer);
         const parsedData = await response.json();
         applyData(parsedData);

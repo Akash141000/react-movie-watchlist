@@ -1,6 +1,6 @@
 import styles from "./Navbar.module.css";
 import { NavLink } from "react-router-dom";
-import React, { useContext, useEffect } from "react";
+import React, {  useContext, useEffect } from "react";
 import AuthContext from "../store/auth-context";
 
 const NavHeader: React.FC = (props) => {
@@ -16,11 +16,12 @@ const NavHeader: React.FC = (props) => {
   );
 };
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const context = useContext(AuthContext);
-  useEffect(()=>{
+
+  useEffect(() => {
     context.autoLogin();
-  },[]);
+  }, []);
 
   const loggedIn = (
     <>
@@ -34,7 +35,9 @@ const Navbar = () => {
         <NavLink to="/favourites">Favourites</NavLink>
       </li>
       <li>
-        <NavLink to="/" onClick={context.removeAuthentication}>Logout</NavLink>
+        <NavLink to="/" onClick={context.removeAuthentication}>
+          Logout
+        </NavLink>
       </li>
     </>
   );
@@ -57,4 +60,3 @@ const Navbar = () => {
   return navItems;
 };
 export default Navbar;
-

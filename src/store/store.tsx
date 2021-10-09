@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+//
 import { dispatchType, Post } from "../util/types";
 
 export interface initialStoreState {
@@ -28,8 +29,6 @@ const favReducer = createSlice({
         post.isFav = true;
         movies[postIdx] = post;
         state.movies = movies;
-      } else if (action.payload.type === dispatchType.favourites) {
-        state.favourites = state.favourites;
       }
     },
     removeFromFavourites(
@@ -63,7 +62,6 @@ const favReducer = createSlice({
     },
   },
 });
-
 
 export const favAction = favReducer.actions;
 

@@ -1,18 +1,27 @@
 import { useEffect, useReducer, useState,useContext } from "react";
+import * as yup from "yup";
+import { SchemaOf, object } from "yup";
+
+//
 import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
-import * as yup from "yup";
-import { SchemaOf, object, string } from "yup";
+
+//
 import AuthContext from "../store/auth-context";
 import FormLayout from "../layout/formLayout";
-import { formFieldsObj } from "../util/types";
+import { formFieldsObj, formReducer, initialFormReducerState } from "../util/types";
 
-const initialState = {
+
+
+
+
+const initialState:initialFormReducerState = {
   formData: null,
 };
 
+
 const loginReducer = (state, action) => {
-  if (action.type === "SUBMIT") {
+  if (action.type === formReducer.submit) {
     return {
       formData: action.val,
     };
@@ -39,12 +48,14 @@ const Login = () => {
     },
   };
 
+  //
   interface yupSchema {
     username: string;
     password: string;
   }
 
-  const validationSchema: SchemaOf<yupSchema> = yup.object({
+  //yup validation schema
+  const validationSchema: SchemaOf<yupSchema> = object({
     username: yup.string().required("Username is required"),
     password: yup
       .string()
@@ -52,6 +63,7 @@ const Login = () => {
       .required("Password is required"),
   });
 
+  //useForm Hook
   const Form = useForm(inputFields, validationSchema, formStateDispatch);
 
   useEffect(() => {
@@ -65,11 +77,8 @@ const Login = () => {
         setResponse
       );
     }
-  }, [formState.formData]);
+  }, [formState]);
 
-  useEffect(()=>{
-    context.autoLogin();
-  },[])
 
   useEffect(() => {
     if (!isLoading && !error) {

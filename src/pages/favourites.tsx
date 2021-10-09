@@ -31,19 +31,16 @@ const Favourites = () => {
     );
   }, []);
 
-  useEffect(() => {
-    setResponseData(favourites);
-  }, [favourites]);
-
+  
   useEffect(() => {
     if (!isLoading) {
       dispatch(favAction.addFavourites(responseData));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error,responseData]);
 
   useEffect(() => {
-    if (!isLoading) {
-      const elements = responseData.map((data) => {
+    if (!isLoading && !error) {
+      const elements = favourites.map((data) => {
         return (
           <Card
             key={data._id}
@@ -62,9 +59,9 @@ const Favourites = () => {
       });
       setCards(elements);
     }
-  }, [responseData, isLoading]);
+  }, [isLoading,error,favourites]);
 
-  return isLoading && error ? (
+  return isLoading && error && favourites.length <=0  ?  (
     <div>Loading...</div>
   ) : (
     <div

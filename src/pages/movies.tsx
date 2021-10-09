@@ -1,20 +1,21 @@
 import { useContext, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+//
 import useHttp from "../hooks/use-http";
+//
 import Card from "../components/Card";
 import { dispatchType, Post } from "../util/types";
 import FavContext from "../store/fav-context";
-import { useSelector, useDispatch } from "react-redux";
 import { favAction, initialStoreState } from "../store/store";
 
 const Movies = () => {
-  const favContext = useContext(FavContext);
   const dispatch = useDispatch();
-  const movies = useSelector((state: initialStoreState) => state.movies);
   const [cards, setCards] = useState([]);
+  const favContext = useContext(FavContext);
+  const movies = useSelector((state: initialStoreState) => state.movies);
   const [responseData, setResponseData] = useState<{
     posts: Post[];
   }>({ posts: null });
-
   const { isLoading, error, sendResponse } = useHttp();
 
   useEffect(() => {
@@ -29,21 +30,17 @@ const Movies = () => {
     );
   }, []);
 
-  useEffect(() => {
-    if (movies.length > 0) {
-      setResponseData({ posts: movies });
-    }
-  }, [movies]);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && !error) {
       dispatch(favAction.addMovies(responseData.posts));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error,responseData]);
 
   useEffect(() => {
-    if (!isLoading) {
-      const elements = responseData.posts.map((data) => {
+    const length = movies.length > 0 ? true : false;
+    if (!isLoading && !error && length) {
+      const elements = movies.map((data) => {
         return (
           <Card
             key={data._id}
@@ -62,9 +59,9 @@ const Movies = () => {
       });
       setCards(elements);
     }
-  }, [responseData.posts, isLoading]);
+  }, [isLoading, error,movies]);
 
-  return isLoading && error ? (
+  return isLoading && error && cards.length <= 0 ? (
     <div>Loading...</div>
   ) : (
     <div
@@ -81,3 +78,4 @@ const Movies = () => {
 };
 
 export default Movies;
+

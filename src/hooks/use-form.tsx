@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { Button, TextField } from "@mui/material";
-import { formFieldsObj } from "../util/types";
+import { formFieldsObj, formReducer } from "../util/types";
 import { SchemaOf } from "yup";
 
 const useForm = (
@@ -12,20 +12,21 @@ const useForm = (
     [index: string]: string;
   };
   const formFields: field = {};
-  const getFields = (fieldsObj: formFieldsObj): void => {
+  (function () {
     for (const key in fieldsObj) {
-       formFields[key] = fieldsObj[key].initial;
+      formFields[key] = fieldsObj[key].initial;
     }
-  };
+  })();
 
   const formik = useFormik({
     initialValues: {
       ...formFields,
     },
     validationSchema: validationSchema,
+
     onSubmit: (values) => {
       sendFormDataDispatch({
-        type: "SUBMIT",
+        type: formReducer.submit,
         val: values,
       });
     },
@@ -70,4 +71,3 @@ const useForm = (
 };
 
 export default useForm;
-

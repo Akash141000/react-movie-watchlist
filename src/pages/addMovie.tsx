@@ -3,14 +3,15 @@ import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
 import { object, SchemaOf, string } from "yup";
 import FormLayout from "../layout/formLayout";
-import { formFieldsObj } from "../util/types";
+import { formFieldsObj, formReducer } from "../util/types";
+import { useHistory } from "react-router";
 
 const initialState = {
   formData: null,
 };
 
 const addMovieReducer = (state, action) => {
-  if (action.type === "SUBMIT") {
+  if (action.type === formReducer.submit) {
     return {
       formData: action.val,
     };
@@ -19,9 +20,9 @@ const addMovieReducer = (state, action) => {
 };
 
 const AddMovie = () => {
-  const [response, setResponse] = useState(null);
+  const [responseData, setResponseData] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
-
+  const history = useHistory();
   const [formState, formStateDispatch] = useReducer(
     addMovieReducer,
     initialState
@@ -53,9 +54,7 @@ const AddMovie = () => {
   const validationSchema: SchemaOf<yupSchema> = object({
     title: string().required("Title is required"),
     imageUrl: string().required("Image url is required"),
-    description: string().required(
-      "Description is required"
-    ),
+    description: string().required("Description is required"),
   });
   const Form = useForm(inputFields, validationSchema, formStateDispatch);
 
@@ -70,11 +69,16 @@ const AddMovie = () => {
             Authorization: localStorage.getItem("token"),
           },
         },
-      
-        setResponse
+        setResponseData
       );
     }
-  }, [formState.formData]);
+  }, [formState]);
+
+  useEffect(()=>{
+    if(!isLoading && !error){
+      history.push("/movies");
+    }
+  },[isLoading,error]);
 
   return <FormLayout heading="Add Movie">{Form}</FormLayout>;
 };

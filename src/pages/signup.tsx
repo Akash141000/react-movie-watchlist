@@ -1,17 +1,24 @@
 import { useEffect, useReducer, useState } from "react";
+import { useHistory } from "react-router";
+import { SchemaOf, object, string } from "yup";
+
+//
 import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
-import * as yup from "yup";
+//
 import FormLayout from "../layout/formLayout";
-import { formFieldsObj } from "../util/types";
-import { SchemaOf,object, string } from "yup";
+import {
+  formFieldsObj,
+  formReducer,
+  initialFormReducerState,
+} from "../util/types";
 
-const initialState = {
+const initialState: initialFormReducerState = {
   formData: null,
 };
 
 const signupReducer = (state, action) => {
-  if (action.type === "SUBMIT") {
+  if (action.type === formReducer.submit) {
     return {
       formData: action.val,
     };
@@ -20,6 +27,7 @@ const signupReducer = (state, action) => {
 };
 
 const Signup = () => {
+  const history = useHistory();
   const [responseData, setResponseData] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
 
@@ -50,14 +58,14 @@ const Signup = () => {
     },
   };
 
-  interface yupSchema{
-    username:string,
-    email:string,
-    password:string,
-    confirmPassword:string,
+  interface yupSchema {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
   }
 
-  const validationSchema:SchemaOf<yupSchema> = object({
+  const validationSchema: SchemaOf<yupSchema> = object({
     username: string().required("Username is required"),
     email: string().email("Enter valid email").required("Email is required"),
     password: string()
@@ -68,6 +76,8 @@ const Signup = () => {
       .min(8, "Password should be minimum 8 characters length")
       .required("Confirm Password is required"),
   });
+
+  //useForm hook
   const Form = useForm(inputFields, validationSchema, formStateDispatch);
 
   useEffect(() => {
@@ -81,7 +91,13 @@ const Signup = () => {
         setResponseData
       );
     }
-  }, [formState.formData]);
+  }, [formState]);
+
+  useEffect(() => {
+    if (!isLoading && !error) {
+      history.push("/login");
+    }
+  }, [isLoading, error]);
 
   return <FormLayout heading="Signup">{Form}</FormLayout>;
 };

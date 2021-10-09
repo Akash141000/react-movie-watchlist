@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+//
 import useHttp from "../hooks/use-http";
 import { dispatchType, Post } from "../util/types";
 import { favAction, initialStoreState } from "./store";
@@ -12,7 +13,8 @@ export const FavContextProvider = (props) => {
   const dispatch = useDispatch();
   const [responseData, setResponseData] = useState(null);
   const { isLoading, error, sendResponse } = useHttp();
-  const movies = useSelector((state: initialStoreState) => state.movies);
+
+  // add or remove from fav
   const addOrRemoveFromFav = (
     post: Post,
     isFav: boolean,
@@ -40,6 +42,7 @@ export const FavContextProvider = (props) => {
       setResponseData
     );
   };
+
 
   const context = {
     favAction: addOrRemoveFromFav,

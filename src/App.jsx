@@ -9,7 +9,7 @@ import AuthContext from "./store/auth-context";
 
 const App = () => {
   const context = useContext(AuthContext);
-  const path = context.isAuthenticated ? "/movies" : "login";
+  const path = context.isAuthenticated ? "/movies" : "/login";
   const loggedOut = (
     <>
       <Route path="/login" exact>
