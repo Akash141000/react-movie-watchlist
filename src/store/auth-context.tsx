@@ -47,7 +47,6 @@ export const AuthContextProvider = (props) => {
   }
 
   useEffect(() => {
-    console.log('response',responseData);
     if (!isLoading && !error && responseData.auth) {
       isAuthenticated(true);
       history.push("/movies");

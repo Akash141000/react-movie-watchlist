@@ -1,10 +1,7 @@
 import styles from "./Navbar.module.css";
-import { Link, NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import React, { useContext, useEffect } from "react";
-import { initialStoreState } from "../store/store";
 import AuthContext from "../store/auth-context";
-import { Button } from "@mui/material";
 
 const NavHeader: React.FC = (props) => {
   return (
@@ -61,11 +58,3 @@ const Navbar = () => {
 };
 export default Navbar;
 
-//   const navItems = (<NavHeader>
-//   <NavIcons name="Movies" link="/"></NavIcons>
-//   <NavIcons name="Add Movie" link="/Add_Movie"></NavIcons>
-//   <NavIcons name="Favourites" link="/favourites"></NavIcons>
-//   <li>
-//     <button onClick={()=>console.log('Logout')}>logout</button>
-//   </li>
-// </NavHeader>);

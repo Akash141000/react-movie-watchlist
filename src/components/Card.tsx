@@ -3,7 +3,6 @@ import NotFavouriteIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { IconButton } from "@mui/material";
 import styles from "./Card.module.css";
 import React from "react";
-import { Post } from "../util/types";
 import CardLayout from "../layout/cardLayout";
 
 const Card: React.FC<{
