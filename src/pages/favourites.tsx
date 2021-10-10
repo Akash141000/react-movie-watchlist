@@ -5,6 +5,10 @@ import FavContext from "../store/fav-context";
 import { useDispatch, useSelector } from "react-redux";
 import { favAction, initialStoreState } from "../store/store";
 import useHttp from "../hooks/use-http";
+import Spinner from "../components/Spinner";
+import Main from "../layout/Main";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Favourites = () => {
   const favContext = useContext(FavContext);
@@ -61,22 +65,11 @@ const Favourites = () => {
   }, [isLoading, error, favourites]);
 
   return isLoading || error ? (
-    favourites.length <= 0 ? (
-      <div>Add favourites</div>
-    ) : (
-      <div>Loading...</div>
-    )
+    <Spinner />
   ) : (
-    <div
-      style={{
-        display: "flex",
-        flexFlow: "row nowrap",
-        justifyContent: "space-around",
-        padding: "3rem",
-      }}
-    >
-      {cards}
-    </div>
+    <Main>
+      {favourites.length <= 0 ? <Main><Button variant="text"><Link to="/movies">Add movies to favourites</Link> </Button> </Main> : cards}
+    </Main>
   );
 };
 

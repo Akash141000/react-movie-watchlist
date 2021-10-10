@@ -7,6 +7,8 @@ import Card from "../components/Card";
 import { dispatchType, Post } from "../util/types";
 import FavContext from "../store/fav-context";
 import { favAction, initialStoreState } from "../store/store";
+import Spinner from "../components/Spinner";
+import Main from "../layout/Main";
 
 const Movies = () => {
   const dispatch = useDispatch();
@@ -62,20 +64,7 @@ const Movies = () => {
     }
   }, [isLoading, error, movies]);
 
-  return isLoading || error ? (
-    <div>Loading...</div>
-  ) : (
-    <div
-      style={{
-        display: "flex",
-        flexFlow: "row nowrap",
-        justifyContent: "space-around",
-        padding: "3rem",
-      }}
-    >
-      {cards}
-    </div>
-  );
+  return isLoading || error ? <Spinner /> : <Main> {cards}</Main>;
 };
 
 export default Movies;
