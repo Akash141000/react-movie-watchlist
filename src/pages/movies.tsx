@@ -30,12 +30,11 @@ const Movies = () => {
     );
   }, []);
 
-
   useEffect(() => {
     if (!isLoading && !error) {
       dispatch(favAction.addMovies(responseData.posts));
     }
-  }, [isLoading, error,responseData]);
+  }, [isLoading, error, responseData]);
 
   useEffect(() => {
     const length = movies.length > 0 ? true : false;
@@ -58,10 +57,12 @@ const Movies = () => {
         );
       });
       setCards(elements);
+    } else if (!isLoading && error) {
+      console.log("Error while fetching movies");
     }
-  }, [isLoading, error,movies]);
+  }, [isLoading, error, movies]);
 
-  return isLoading && error && cards.length <= 0 ? (
+  return isLoading || error ? (
     <div>Loading...</div>
   ) : (
     <div
@@ -78,4 +79,3 @@ const Movies = () => {
 };
 
 export default Movies;
-

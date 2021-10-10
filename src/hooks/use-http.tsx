@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { requestObj } from "../util/types";
+import { httpResponse, requestObj } from "../util/types";
+
+const ErrorStatus: number[] = [400, 401, 402, 422, 500];
+const SuccessStatus: number[] = [200, 201];
 
 const useHttp = () => {
   const { REACT_APP_DOMAIN } = process.env;
@@ -37,26 +40,24 @@ const useHttp = () => {
     setError(null);
     try {
       const response = await fetch(`${DOMAIN}`, { ...requestBody });
-    
+
       const responseTimer = setTimeout(() => {
         if (!response) {
-          throw new Error("Error fetching data");
+          throw new Error("Response timeout!");
         }
-      }, 5000);
-      if (response.status === 401 && 422 && 500) {
- 
+      }, 3000);
+      if (ErrorStatus.includes(response.status)) {
         window.clearTimeout(responseTimer);
-        throw new Error("Error fetching data");
-      } else if (response.status === 200 || 201) {
-
+        throw new Error((response as httpResponse).error);
+      } else if (SuccessStatus.includes(response.status)) {
         window.clearTimeout(responseTimer);
         const parsedData = await response.json();
         applyData(parsedData);
         setIsLoading(false);
       }
     } catch (err) {
-      setIsLoading(false);
       setError(true);
+      setIsLoading(false);
       console.log(err);
     }
   };

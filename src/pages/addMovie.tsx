@@ -3,17 +3,36 @@ import useForm from "../hooks/use-form";
 import useHttp from "../hooks/use-http";
 import { object, SchemaOf, string } from "yup";
 import FormLayout from "../layout/formLayout";
-import { formFieldsObj, formReducer } from "../util/types";
+import { formFieldsObj, formReducer, initialFormReducerState } from "../util/types";
 import { useHistory } from "react-router";
 
-const initialState = {
+const initialState: initialFormReducerState = {
   formData: null,
+  hasError: false,
+  submit:false,
 };
+
 
 const addMovieReducer = (state, action) => {
   if (action.type === formReducer.submit) {
     return {
       formData: action.val,
+      hasError : false,
+      submit:false,
+    };
+  }
+  if(action.type === formReducer.error){
+    return{
+      formData:state.formData,
+      hasError:action.val,
+      submit:state.submit
+    };
+  }
+  if(action.type === formReducer.isSubmitting){
+    return{
+      formData:null,
+      hasError:false,
+      submit:true,
     };
   }
   return state;
@@ -56,10 +75,10 @@ const AddMovie = () => {
     imageUrl: string().required("Image url is required"),
     description: string().required("Description is required"),
   });
-  const Form = useForm(inputFields, validationSchema, formStateDispatch);
+  const Form = useForm(inputFields, validationSchema,formState, formStateDispatch);
 
   useEffect(() => {
-    if (formState.formData !== null) {
+    if (formState.formData !== null  && !formState.submit) {
       sendResponse(
         "/addPost",
         {
@@ -71,12 +90,19 @@ const AddMovie = () => {
         },
         setResponseData
       );
+      formStateDispatch({
+        type:formReducer.isSubmitting,
+        val:true,
+      })
     }
   }, [formState]);
 
   useEffect(()=>{
     if(!isLoading && !error){
       history.push("/movies");
+    }
+    else if(!isLoading && error){
+      console.log("Error while signing up");
     }
   },[isLoading,error]);
 

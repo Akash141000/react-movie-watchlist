@@ -1,7 +1,8 @@
 import styles from "./Navbar.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink,useHistory } from "react-router-dom";
 import React, {  useContext, useEffect } from "react";
 import AuthContext from "../store/auth-context";
+
 
 const NavHeader: React.FC = (props) => {
   return (
@@ -18,10 +19,17 @@ const NavHeader: React.FC = (props) => {
 
 const Navbar: React.FC = () => {
   const context = useContext(AuthContext);
+  const history = useHistory()
 
   useEffect(() => {
     context.autoLogin();
   }, []);
+
+  useEffect(()=>{
+    if(!context.isAuthenticated){
+      history.push("/login");
+    }
+  },[context.isAuthenticated]);
 
   const loggedIn = (
     <>

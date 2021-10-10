@@ -1,13 +1,20 @@
 import { useFormik } from "formik";
 import { Button, TextField } from "@mui/material";
-import { formFieldsObj, formReducer } from "../util/types";
+import {
+  formFieldsObj,
+  formReducer,
+  initialFormReducerState,
+} from "../util/types";
 import { SchemaOf } from "yup";
+import { useEffect, useState } from "react";
 
 const useForm = (
   fieldsObj: formFieldsObj,
   validationSchema: SchemaOf<any>,
+  formState: initialFormReducerState,
   sendFormDataDispatch: any
 ) => {
+  const [hasError, setError] = useState<boolean>(false);
   type field = {
     [index: string]: string;
   };
@@ -18,17 +25,26 @@ const useForm = (
     }
   })();
 
+  useEffect(() => {
+    if (formState.hasError) {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [formState]);
+
   const formik = useFormik({
     initialValues: {
       ...formFields,
     },
     validationSchema: validationSchema,
-
     onSubmit: (values) => {
       sendFormDataDispatch({
         type: formReducer.submit,
         val: values,
       });
+      formik.resetForm();
     },
   });
 
@@ -66,6 +82,11 @@ const useForm = (
       >
         Submit
       </Button>
+      {hasError && (
+        <div style={{ textAlign: "center", color: "red", margin: "0.5rem" }}>
+          Bad credentials!
+        </div>
+      )}
     </form>
   );
 };

@@ -25,11 +25,19 @@ export enum dispatchType {
   favourites,
 }
 
-export enum formReducer{
-  submit
+export enum formReducer {
+  submit,
+  error,
+  isSubmitting,
 }
 
+export interface initialFormReducerState {
+  formData: any;
+  hasError:boolean;
+  submit:boolean;
+}
 
-export interface initialFormReducerState{
-  formData:any
+export interface httpResponse {
+  error?: string;
+  message?: string;
 }

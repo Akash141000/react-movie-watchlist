@@ -15,12 +15,31 @@ import {
 
 const initialState: initialFormReducerState = {
   formData: null,
+  hasError: false,
+  submit:false,
 };
+
 
 const signupReducer = (state, action) => {
   if (action.type === formReducer.submit) {
     return {
       formData: action.val,
+      hasError : false,
+      submit:false,
+    };
+  }
+  if(action.type === formReducer.error){
+    return{
+      formData:state.formData,
+      hasError:action.val,
+      submit:state.submit
+    };
+  }
+  if(action.type === formReducer.isSubmitting){
+    return{
+      formData:null,
+      hasError:false,
+      submit:true,
     };
   }
   return state;
@@ -78,10 +97,11 @@ const Signup = () => {
   });
 
   //useForm hook
-  const Form = useForm(inputFields, validationSchema, formStateDispatch);
+  const Form = useForm(inputFields, validationSchema, formState,formStateDispatch);
+
 
   useEffect(() => {
-    if (formState.formData !== null) {
+    if (formState.formData !== null && !formState.submit) {
       sendResponse(
         "/postSignup",
         {
@@ -90,12 +110,22 @@ const Signup = () => {
         },
         setResponseData
       );
+      formStateDispatch({
+        type:formReducer.isSubmitting,
+        val:true,
+      })
     }
   }, [formState]);
 
   useEffect(() => {
     if (!isLoading && !error) {
       history.push("/login");
+    }else if(!isLoading && error){
+      formStateDispatch({
+        type:formReducer.error,
+        val:true,
+      })
+      console.log("Error while signing up");
     }
   }, [isLoading, error]);
 

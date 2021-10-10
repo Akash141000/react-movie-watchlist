@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { favAction, initialStoreState } from "../store/store";
 import useHttp from "../hooks/use-http";
 
-
-
 const Favourites = () => {
   const favContext = useContext(FavContext);
   const dispatch = useDispatch();
@@ -31,12 +29,11 @@ const Favourites = () => {
     );
   }, []);
 
-  
   useEffect(() => {
     if (!isLoading) {
       dispatch(favAction.addFavourites(responseData));
     }
-  }, [isLoading, error,responseData]);
+  }, [isLoading, error, responseData]);
 
   useEffect(() => {
     if (!isLoading && !error) {
@@ -58,11 +55,17 @@ const Favourites = () => {
         );
       });
       setCards(elements);
+    } else if (!isLoading && error) {
+      console.log("Error fetching resource from fav");
     }
-  }, [isLoading,error,favourites]);
+  }, [isLoading, error, favourites]);
 
-  return isLoading && error && favourites.length <=0  ?  (
-    <div>Loading...</div>
+  return isLoading || error ? (
+    favourites.length <= 0 ? (
+      <div>Add favourites</div>
+    ) : (
+      <div>Loading...</div>
+    )
   ) : (
     <div
       style={{

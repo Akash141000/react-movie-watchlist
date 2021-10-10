@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState,useContext } from "react";
+import { useEffect, useReducer, useState, useContext } from "react";
 import * as yup from "yup";
 import { SchemaOf, object } from "yup";
 
@@ -9,21 +9,38 @@ import useHttp from "../hooks/use-http";
 //
 import AuthContext from "../store/auth-context";
 import FormLayout from "../layout/formLayout";
-import { formFieldsObj, formReducer, initialFormReducerState } from "../util/types";
+import {
+  formFieldsObj,
+  formReducer,
+  initialFormReducerState,
+} from "../util/types";
 
-
-
-
-
-const initialState:initialFormReducerState = {
+const initialState: initialFormReducerState = {
   formData: null,
+  hasError: false,
+  submit:false,
 };
 
-
-const loginReducer = (state, action) => {
+const loginReducer = (state:initialFormReducerState, action) => {
   if (action.type === formReducer.submit) {
     return {
       formData: action.val,
+      hasError : false,
+      submit:false,
+    };
+  }
+  if(action.type === formReducer.error){
+    return{
+      formData:state.formData,
+      hasError:action.val,
+      submit:state.submit
+    };
+  }
+  if(action.type === formReducer.isSubmitting){
+    return{
+      formData:null,
+      hasError:false,
+      submit:true,
     };
   }
   return state;
@@ -64,10 +81,15 @@ const Login = () => {
   });
 
   //useForm Hook
-  const Form = useForm(inputFields, validationSchema, formStateDispatch);
+  const Form = useForm(
+    inputFields,
+    validationSchema,
+    formState,
+    formStateDispatch
+  );
 
   useEffect(() => {
-    if (formState.formData !== null) {
+    if (formState.formData !== null && !formState.submit) {
       sendResponse(
         "/postLogin",
         {
@@ -76,13 +98,21 @@ const Login = () => {
         },
         setResponse
       );
+      formStateDispatch({
+        type:formReducer.isSubmitting,
+        val:true,
+      })
     }
   }, [formState]);
-
 
   useEffect(() => {
     if (!isLoading && !error) {
       context.setAuthentication(responseData);
+    } else if (!isLoading && error) {
+      formStateDispatch({
+        type: formReducer.error,
+        val: true,
+      });
     }
   }, [isLoading, error]);
 
