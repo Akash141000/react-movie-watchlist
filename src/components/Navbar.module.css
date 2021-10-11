@@ -48,3 +48,16 @@ button {
   background-color: inherit;
   cursor: pointer;
 }
+
+@media screen and (max-width: 600px) {
+  .header {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    height: 4rem;
+    width: 100vw;
+    background-color: teal;
+    position: relative;
+    /* z-index: 10; */
+  }
+}
