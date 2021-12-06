@@ -56,7 +56,7 @@ const Login = () => {
     username: {
       initial: "",
       type: "text",
-      label: "Title",
+      label: "name",
     },
     password: {
       initial: "",

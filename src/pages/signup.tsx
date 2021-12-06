@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { SchemaOf, object, string } from "yup";
 
 //
@@ -20,7 +20,7 @@ const initialState: initialFormReducerState = {
 };
 
 
-const signupReducer = (state, action) => {
+const signupReducer = (state:initialFormReducerState, action:{type:formReducer,val:any}) => {
   if (action.type === formReducer.submit) {
     return {
       formData: action.val,

@@ -4,7 +4,7 @@ import useHttp from "../hooks/use-http";
 import { object, SchemaOf, string } from "yup";
 import FormLayout from "../layout/formLayout";
 import { formFieldsObj, formReducer, initialFormReducerState } from "../util/types";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 const initialState: initialFormReducerState = {
   formData: null,
@@ -13,7 +13,7 @@ const initialState: initialFormReducerState = {
 };
 
 
-const addMovieReducer = (state, action) => {
+const addMovieReducer = (state:initialFormReducerState, action:{type:formReducer,val:any}) => {
   if (action.type === formReducer.submit) {
     return {
       formData: action.val,

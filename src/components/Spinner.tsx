@@ -3,14 +3,12 @@ import styles from "./Spinner.module.css"
 
 const Spinner = () => {
     return(
-    createPortal( <>
-        <div className={styles['lds-ring']}>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </>,document.getElementById('root'))
+    createPortal(<> <div className={styles['lds-ring']}>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+         </div></>,document.getElementById("root")!)
     );
 };
 
